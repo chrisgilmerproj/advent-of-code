@@ -7,10 +7,12 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     if args.len() != 2 {
-        println!("Not enough arguments passed, plese include filename!");
+        println!("Not enough arguments passed, please include filename!");
         std::process::exit(1);
     }
     let file_path = &args[1];
+
+    let mut elves = Vec::new();
 
     println!("File: {}", file_path);
     // File hosts must exist in current path before this produces output
@@ -18,15 +20,10 @@ fn main() {
         // Consumes the iterator, returns an (Optional) String
         let mut sum: i32 = 0;
         let mut elf: i32 = 1;
-        let mut largest: i32 = 0;
-        let mut best_elf: i32 = 0;
         for line in lines {
             if let Ok(ip) = line {
                 if ip.chars().count() == 0 {
-                    if sum > largest {
-                        largest = sum;
-                        best_elf = elf;
-                    }
+                    elves.push((sum, elf));
                     sum = 0;
                     elf = elf + 1;
                 } else {
@@ -34,7 +31,13 @@ fn main() {
                 }
             }
         }
-        println!("Best Elf: {}, Calories: {}", best_elf, largest);
+
+        elves.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap());
+        println!("Elf: {}, Calories: {}", elves[0].0, elves[0].1);
+        println!("Elf: {}, Calories: {}", elves[1].0, elves[1].1);
+        println!("Elf: {}, Calories: {}", elves[2].0, elves[2].1);
+        let total_cals = elves[0].0 + elves[1].0 + elves[2].0;
+        println!("Total Calories: {}", total_cals)
     }
 }
 
