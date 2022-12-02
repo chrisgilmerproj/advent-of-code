@@ -6,17 +6,32 @@ use std::path::Path;
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    if args.len() != 2 {
-        println!("Not enough arguments passed, please include filename!");
+    if args.len() != 3 {
+        println!("Not enough arguments passed, please include problem number and filename!");
         std::process::exit(1);
     }
-    let file_path = &args[1];
+    let problem_num = &args[1].parse::<i32>().unwrap();
+    let filename = &args[2];
+    if !Path::new(filename).exists() {
+        println!("File does not exist at path {}", filename);
+        std::process::exit(1);
+    }
+    println!("File: {}", filename);
 
+    match problem_num {
+        1 => problem_01(filename),
+        _ => std::process::exit(1),
+    }
+}
+
+fn problem_01<P>(filename: P)
+where
+    P: AsRef<Path>,
+{
     let mut elves = Vec::new();
 
-    println!("File: {}", file_path);
     // File hosts must exist in current path before this produces output
-    if let Ok(lines) = read_lines(file_path) {
+    if let Ok(lines) = read_lines(filename) {
         // Consumes the iterator, returns an (Optional) String
         let mut sum: i32 = 0;
         let mut elf: i32 = 1;
