@@ -3,6 +3,7 @@ use std::path::Path;
 
 mod prob01;
 mod prob02;
+mod prob03;
 mod utils;
 
 fn main() {
@@ -23,6 +24,7 @@ fn main() {
     match problem_num {
         1 => prob01::problem_01(filename),
         2 => prob02::problem_02(filename),
+        3 => prob03::problem_03(filename),
         _ => std::process::exit(1),
     }
 }

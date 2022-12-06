@@ -1,0 +1,14 @@
+use std::path::Path;
+
+use crate::utils::read_lines;
+
+pub fn problem_XX<P>(filename: P)
+where
+    P: AsRef<Path>,
+{
+    if let Ok(lines) = read_lines(filename) {
+        for line in lines {
+            if let Ok(ip) = line {}
+        }
+    }
+}
