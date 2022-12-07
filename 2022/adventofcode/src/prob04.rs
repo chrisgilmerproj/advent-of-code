@@ -6,7 +6,8 @@ pub fn problem_04<P>(filename: P)
 where
     P: AsRef<Path>,
 {
-    let mut counter = 0;
+    let mut contains_counter = 0;
+    let mut overlap_counter = 0;
     if let Ok(lines) = read_lines(filename) {
         for line in lines {
             if let Ok(ip) = line {
@@ -16,12 +17,18 @@ where
                 if contains(group_a.clone(), group_b.clone())
                     || contains(group_b.clone(), group_a.clone())
                 {
-                    counter += 1;
+                    contains_counter += 1;
+                }
+                if overlap(group_a.clone(), group_b.clone())
+                    || overlap(group_b.clone(), group_a.clone())
+                {
+                    overlap_counter += 1;
                 }
             }
         }
     }
-    println!("Overlaps: {}", counter);
+    println!("Contains full overlaps: {}", contains_counter);
+    println!("Contains Overlaps: {}", overlap_counter);
 }
 
 fn split_range(range: &str) -> Vec<i32> {
@@ -34,4 +41,9 @@ fn split_range(range: &str) -> Vec<i32> {
 
 fn contains(group_a: Vec<i32>, group_b: Vec<i32>) -> bool {
     return group_a[0] >= group_b[0] && group_a[1] <= group_b[1];
+}
+
+fn overlap(group_a: Vec<i32>, group_b: Vec<i32>) -> bool {
+    return (group_a[0] <= group_b[0] && group_b[0] <= group_a[1])
+        || (group_b[0] <= group_a[1] && group_a[1] <= group_b[1]);
 }
