@@ -33,10 +33,15 @@ where
                     let col1: i32 = caps.get(2).unwrap().as_str().parse::<i32>().unwrap() - 1;
                     let col2: i32 = caps.get(3).unwrap().as_str().parse::<i32>().unwrap() - 1;
 
+                    let mut crane: Vec<char> = Vec::new();
                     while num > 0 {
                         let thing = grid[col1 as usize].pop().unwrap();
-                        grid[col2 as usize].push(thing);
+                        crane.insert(0, thing);
+                        // grid[col2 as usize].push(thing);
                         num -= 1;
+                    }
+                    for thing in crane {
+                        grid[col2 as usize].push(thing);
                     }
                 }
             }
