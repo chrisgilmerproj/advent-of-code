@@ -23,10 +23,10 @@ fn main() {
     println!("File: {}", filename);
 
     match problem_num {
-        1 => prob01::problem_01(filename),
-        2 => prob02::problem_02(filename),
-        3 => prob03::problem_03(filename),
-        4 => prob04::problem_04(filename),
+        1 => prob01::problem(filename),
+        2 => prob02::problem(filename),
+        3 => prob03::problem(filename),
+        4 => prob04::problem(filename),
         _ => std::process::exit(1),
     }
 }

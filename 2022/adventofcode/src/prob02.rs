@@ -9,7 +9,7 @@ use crate::utils::read_lines;
 // Lose (0) - X
 // Draw (3) - Y
 // Win (6) - Z
-pub fn problem_02<P>(filename: P)
+pub fn problem<P>(filename: P)
 where
     P: AsRef<Path>,
 {

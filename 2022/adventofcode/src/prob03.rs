@@ -3,7 +3,7 @@ use std::path::Path;
 
 use crate::utils::read_lines;
 
-pub fn problem_03<P>(filename: P)
+pub fn problem<P>(filename: P)
 where
     P: AsRef<Path>,
 {
