@@ -7,6 +7,7 @@ mod prob03;
 mod prob04;
 mod prob05;
 mod prob06;
+mod prob07;
 mod utils;
 
 fn main() {
@@ -31,6 +32,7 @@ fn main() {
         4 => prob04::problem(filename),
         5 => prob05::problem(filename),
         6 => prob06::problem(filename),
+        7 => prob07::problem(filename),
         _ => std::process::exit(1),
     }
 }
