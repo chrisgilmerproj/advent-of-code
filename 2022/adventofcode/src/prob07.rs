@@ -69,5 +69,30 @@ where
             "Total of all files: {:?}",
             dir_size.get(&String::from("/")).unwrap()
         );
+
+        let max_space = 70000000;
+        let min_space = 30000000;
+
+        let unused = max_space - dir_size.get(&String::from("/")).unwrap();
+        println!("Unused Space: {}", unused);
+        let needed = min_space - unused;
+        println!("Needed Space: {}", needed);
+        println!("\nPossible choices:");
+
+        let mut smallest_key = "";
+        let mut smallest_val: i32 = 0;
+        for (key, value) in dir_size.iter() {
+            if value > &needed && key != "/" {
+                println!("{} {}", key, value);
+                if smallest_val == 0 {
+                    smallest_key = key;
+                    smallest_val = *value;
+                } else if *value < smallest_val {
+                    smallest_key = key;
+                    smallest_val = *value;
+                }
+            }
+        }
+        println!("\nSmallest to choose: {} {}", smallest_key, smallest_val);
     }
 }
