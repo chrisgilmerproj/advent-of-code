@@ -18,82 +18,82 @@ where
                     cols = ip.chars().count();
                 }
                 rows += 1;
-                for (num, c) in ip.chars().enumerate() {
+                for c in ip.chars() {
                     let i = c.to_digit(10).unwrap();
                     treeline.push(i);
-                    // Pre-count the visible trees on the edge
-                    if num == 0 || num == cols - 1 {
-                        count_visible += 1;
-                    } else if rows == 1 || rows == cols {
-                        count_visible += 1;
-                    }
                 }
             }
             tree.push(treeline);
         }
         // Iterate through inside trees
-        for r in 1..rows - 1 {
-            for c in 1..cols - 1 {
+        let mut max_viz: i32 = 0;
+        for r in 0..rows {
+            for c in 0..cols {
                 let max = tree[r][c];
+                let mut viz: i32 = 1;
                 // Search the tree and break
                 // println!("\nbegin: {}, {}, {}", r, c, tree[r][c]);
                 // println!("visible: {}", count_visible);
                 // up
-                let mut found_up: bool = false;
-                for i in (0..r).rev() {
+                let mut found_block: i32 = 0;
+                for (num, i) in (0..r).rev().enumerate() {
                     // println!("up   : {}, {}, {}, {}", i, c, tree[i][c], tree[i][c] >= max);
+                    if i == 0 || tree[i][c] >= max {
+                        // println!("Viz up    {} {}", viz, num as i32 + 1);
+                        viz *= num as i32 + 1;
+                    }
                     if tree[i][c] >= max {
-                        found_up = true;
+                        found_block += 1;
                         break;
                     }
-                }
-                if !found_up {
-                    count_visible += 1;
-                    continue;
                 }
                 // down
-                let mut found_down: bool = false;
-                for i in r + 1..rows {
+                for (num, i) in (r + 1..rows).enumerate() {
                     // println!("down : {}, {}, {}, {}", i, c, tree[i][c], tree[i][c] >= max);
+                    if i == rows - 1 || tree[i][c] >= max {
+                        // println!("Viz down  {} {}", viz, num as i32 + 1);
+                        viz *= num as i32 + 1;
+                    }
                     if tree[i][c] >= max {
-                        found_down = true;
+                        found_block += 1;
                         break;
                     }
-                }
-                if !found_down {
-                    count_visible += 1;
-                    continue;
                 }
                 // left
-                let mut found_left: bool = false;
-                for i in (0..c).rev() {
+                for (num, i) in (0..c).rev().enumerate() {
                     // println!("left : {}, {}, {}, {}", r, i, tree[r][i], tree[r][i] >= max);
+                    if i == 0 || tree[r][i] >= max {
+                        // println!("Viz left  {} {}", viz, num as i32 + 1);
+                        viz *= num as i32 + 1;
+                    }
                     if tree[r][i] >= max {
-                        found_left = true;
+                        found_block += 1;
                         break;
                     }
-                }
-                if !found_left {
-                    count_visible += 1;
-                    continue;
                 }
                 // right
-                let mut found_right: bool = false;
-                for i in c + 1..cols {
+                for (num, i) in (c + 1..cols).enumerate() {
                     // println!("right: {}, {}, {}, {}", r, i, tree[r][i], tree[r][i] >= max);
+                    if i == cols - 1 || tree[r][i] >= max {
+                        // println!("Viz right {} {}", viz, num as i32 + 1);
+                        viz *= num as i32 + 1;
+                    }
                     if tree[r][i] >= max {
-                        found_right = true;
+                        found_block += 1;
                         break;
                     }
                 }
-                if !found_right {
+                if found_block < 4 {
                     count_visible += 1;
-                    continue;
+                }
+                if viz > max_viz {
+                    max_viz = viz;
                 }
             }
         }
         // println!("{:?}", tree);
         // println!("size: {} rows, {} cols", rows, cols);
         println!("visible: {} trees", count_visible);
+        println!("max viz: {}", max_viz);
     }
 }
