@@ -7,10 +7,14 @@ pub fn problem<P>(filename: P)
 where
     P: AsRef<Path>,
 {
-    let mut pos_h: Vec<i32> = vec![0, 0];
-    let mut pos_t: Vec<i32> = vec![0, 0];
+    //let num_knots = 2;
+    let num_knots = 10;
+    let mut knots: Vec<Vec<i32>> = Vec::new();
+    for _i in 0..num_knots {
+        knots.push(vec![0, 0]);
+    }
     let mut visited: HashSet<Vec<i32>> = HashSet::new();
-    visited.insert(pos_t.clone());
+    visited.insert(knots.last().expect("Missing last value").to_vec());
 
     if let Ok(lines) = read_lines(filename) {
         for line in lines {
@@ -22,44 +26,47 @@ where
 
                 for i in 1..steps + 1 {
                     println!("\ndirection {}, step {}", direction, i);
-                    // Move H
+                    // Move Head Knot
                     match direction {
-                        "U" => pos_h[0] += 1,
-                        "D" => pos_h[0] -= 1,
-                        "R" => pos_h[1] += 1,
-                        "L" => pos_h[1] -= 1,
+                        "U" => knots[0][0] += 1,
+                        "D" => knots[0][0] -= 1,
+                        "R" => knots[0][1] += 1,
+                        "L" => knots[0][1] -= 1,
                         &_ => todo!(),
                     }
 
-                    // Move T
-                    let diff_0 = pos_h[0] - pos_t[0];
-                    let diff_1 = pos_h[1] - pos_t[1];
-                    println!("diffs: {}, {}", diff_0, diff_1);
-                    if diff_0.abs() == 2 && diff_1 == 0 {
-                        if diff_0 > 0 {
-                            pos_t[0] += 1;
-                        } else if diff_0 < 0 {
-                            pos_t[0] -= 1;
-                        }
-                    } else if diff_0 == 0 && diff_1.abs() == 2 {
-                        if diff_1 > 0 {
-                            pos_t[1] += 1;
-                        } else if diff_1 < 0 {
-                            pos_t[1] -= 1;
-                        }
-                    } else if ((i32::pow(diff_0, 2) + i32::pow(diff_1, 2)) as f64).sqrt() > 2.0 {
-                        if diff_0 > 0 {
-                            pos_t[0] += 1;
-                        } else if diff_0 < 0 {
-                            pos_t[0] -= 1;
-                        }
-                        if diff_1 > 0 {
-                            pos_t[1] += 1;
-                        } else if diff_1 < 0 {
-                            pos_t[1] -= 1;
+                    for k in 0..num_knots - 1 {
+                        // Move Knots
+                        let diff_0 = knots[k][0] - knots[k + 1][0];
+                        let diff_1 = knots[k][1] - knots[k + 1][1];
+                        println!("diffs: {}, {}", diff_0, diff_1);
+                        if diff_0.abs() == 2 && diff_1 == 0 {
+                            if diff_0 > 0 {
+                                knots[k + 1][0] += 1;
+                            } else if diff_0 < 0 {
+                                knots[k + 1][0] -= 1;
+                            }
+                        } else if diff_0 == 0 && diff_1.abs() == 2 {
+                            if diff_1 > 0 {
+                                knots[k + 1][1] += 1;
+                            } else if diff_1 < 0 {
+                                knots[k + 1][1] -= 1;
+                            }
+                        } else if ((i32::pow(diff_0, 2) + i32::pow(diff_1, 2)) as f64).sqrt() > 2.0
+                        {
+                            if diff_0 > 0 {
+                                knots[k + 1][0] += 1;
+                            } else if diff_0 < 0 {
+                                knots[k + 1][0] -= 1;
+                            }
+                            if diff_1 > 0 {
+                                knots[k + 1][1] += 1;
+                            } else if diff_1 < 0 {
+                                knots[k + 1][1] -= 1;
+                            }
                         }
                     }
-                    visited.insert(pos_t.clone());
+                    visited.insert(knots.last().expect("Missing last value").to_vec());
                 }
             }
         }
