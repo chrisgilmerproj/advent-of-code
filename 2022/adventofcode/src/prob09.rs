@@ -35,19 +35,31 @@ where
                     let diff_0 = pos_h[0] - pos_t[0];
                     let diff_1 = pos_h[1] - pos_t[1];
                     println!("diffs: {}, {}", diff_0, diff_1);
-                    if diff_0.abs() > 1 || diff_1.abs() > 1 {
-                        if diff_0 < 1 {
-                            pos_t[0] -= 1;
-                        } else if diff_0 > 1 {
+                    if diff_0.abs() == 2 && diff_1 == 0 {
+                        if diff_0 > 0 {
                             pos_t[0] += 1;
+                        } else if diff_0 < 0 {
+                            pos_t[0] -= 1;
                         }
-                        if diff_1 < 1 {
-                            pos_t[1] -= 1;
-                        } else if diff_1 > 1 {
+                    } else if diff_0 == 0 && diff_1.abs() == 2 {
+                        if diff_1 > 0 {
                             pos_t[1] += 1;
+                        } else if diff_1 < 0 {
+                            pos_t[1] -= 1;
                         }
-                        visited.insert(pos_t.clone());
+                    } else if ((i32::pow(diff_0, 2) + i32::pow(diff_1, 2)) as f64).sqrt() > 2.0 {
+                        if diff_0 > 0 {
+                            pos_t[0] += 1;
+                        } else if diff_0 < 0 {
+                            pos_t[0] -= 1;
+                        }
+                        if diff_1 > 0 {
+                            pos_t[1] += 1;
+                        } else if diff_1 < 0 {
+                            pos_t[1] -= 1;
+                        }
                     }
+                    visited.insert(pos_t.clone());
                 }
             }
         }
